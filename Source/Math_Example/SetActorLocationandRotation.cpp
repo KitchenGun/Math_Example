@@ -15,7 +15,8 @@ ASetActorLocationandRotation::ASetActorLocationandRotation()
 void ASetActorLocationandRotation::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	NewLocation = FVector(0.0f, 0.0f, 70.0f);
 	SetActorLocationAndRotation(NewLocation, NewRotation, false, 0, ETeleportType::None);
 }
 
@@ -23,6 +24,7 @@ void ASetActorLocationandRotation::BeginPlay()
 void ASetActorLocationandRotation::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	NewLocation += FVector(Velocity, 0.0f, 0.0f)*DeltaTime;
+	SetActorLocationAndRotation(NewLocation, NewRotation, false, 0, ETeleportType::None);
 }
 

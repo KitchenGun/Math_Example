@@ -28,4 +28,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Location")
 	FQuat NewRotation;
 
+	UPROPERTY(EditAnywhere, Category = "Location")
+	float Velocity;
 };
