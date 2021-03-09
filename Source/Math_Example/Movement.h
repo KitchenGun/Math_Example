@@ -3,19 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/InputComponent.h"
 #include "GameFramework/Pawn.h"
-#include "TestSubject.generated.h"
+#include "Movement.generated.h"
 
 UCLASS()
-class MATH_EXAMPLE_API ATestSubject : public APawn
+class MATH_EXAMPLE_API AMovement : public APawn
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this pawn's properties
-	ATestSubject();
-	int Velocity;
-	FVector CurrentLocation;
+	AMovement();
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,4 +27,15 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+private:
+	
+
+	float HVelocity = 100.0f;
+	float VVelocity = 150.0f;
+	FVector MovementDirection;
+
+private:
+	void HorizontalMove(float value);
+	void VerticalMove(float value);
+
 };
