@@ -25,6 +25,7 @@ void AMovement::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	const FVector NewLocation = GetActorLocation() + (MovementDirection * DeltaTime);
 	SetActorLocation(NewLocation);
+	MovementDirection = FVector().ZeroVector;
 	
 }
 
@@ -40,13 +41,15 @@ void AMovement::HorizontalMove(float value)
 {
 	if (value != 0.0f)
 	{
+		inputHorizontalDir = true;
 		UE_LOG(LogTemp, Log, TEXT("h%f"), value);
 		MovementDirection.Y = value*HVelocity;
 	}
 	else
 	{
-		MovementDirection = FVector().ZeroVector;
+		inputHorizontalDir = false;
 	}
+	
 }
 
 void AMovement::VerticalMove(float value)
@@ -55,9 +58,5 @@ void AMovement::VerticalMove(float value)
 	{
 		UE_LOG(LogTemp, Log, TEXT("v%f"), value);
 		MovementDirection.X = value * VVelocity;
-	}
-	else
-	{
-		MovementDirection = FVector().ZeroVector;
 	}
 }

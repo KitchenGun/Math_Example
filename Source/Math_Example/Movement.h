@@ -29,10 +29,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 private:
 	
-
-	float HVelocity = 100.0f;
-	float VVelocity = 150.0f;
-	FVector MovementDirection;
+	bool inputHorizontalDir = false;
+	float HVelocity = 100.0f;//수평이동속도
+	float VVelocity = 150.0f;//수직이동속도
+	FVector MovementDirection;//방향
 
 private:
 	void HorizontalMove(float value);
