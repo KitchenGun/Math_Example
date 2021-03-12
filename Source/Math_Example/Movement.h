@@ -27,13 +27,14 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-private:
-	
+private://이동관련 변수
+	//입력확인용
 	bool inputHorizontalDir = false;
+	bool inputVerticalDir = false;
+	//속도
 	float HVelocity = 100.0f;//수평이동속도
 	float VVelocity = 150.0f;//수직이동속도
 	FVector MovementDirection;//방향
-
 private:
 	void HorizontalMove(float value);
 	void VerticalMove(float value);

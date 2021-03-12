@@ -23,10 +23,27 @@ void AMovement::BeginPlay()
 void AMovement::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	const FVector NewLocation = GetActorLocation() + (MovementDirection * DeltaTime);
+	FVector NewLocation; 
+	if (inputHorizontalDir&&inputVerticalDir)//동시입력
+	{
+		//대각선 속도와 일반 속도의 비율을 구하여 동시 입력시 속도가 빨라지지 않도록함
+		{
+			double numerator = sqrt(pow(abs(MovementDirection.X), 2) + pow(abs(MovementDirection.Y), 2));
+			double denominator = (abs(MovementDirection.X) + abs(MovementDirection.Y));
+			double velocityRatio = (numerator / denominator);
+			//확인용 속도 비율 출력
+			UE_LOG(LogTemp, Log, TEXT("x:%f"), velocityRatio);
+			NewLocation = (MovementDirection * velocityRatio) * DeltaTime;
+			//액터의 기본위치
+			NewLocation += GetActorLocation();
+		}
+	}
+	else//한개의 축 입력
+	{
+		NewLocation = GetActorLocation() + (MovementDirection * DeltaTime);
+	}
 	SetActorLocation(NewLocation);
 	MovementDirection = FVector().ZeroVector;
-	
 }
 
 // Called to bind functionality to input
@@ -37,26 +54,30 @@ void AMovement::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	InputComponent->BindAxis("Vertical", this, &AMovement::VerticalMove);
 }
 
+//오른쪽 왼쪽 이동
 void AMovement::HorizontalMove(float value)
 {
-	if (value != 0.0f)
+	if (value != 0.0f)//입력이 들어올경우
 	{
 		inputHorizontalDir = true;
-		UE_LOG(LogTemp, Log, TEXT("h%f"), value);
 		MovementDirection.Y = value*HVelocity;
 	}
-	else
+	else//입력이 없을 경우
 	{
 		inputHorizontalDir = false;
 	}
 	
 }
-
+//앞쪽 뒤쪽 이동
 void AMovement::VerticalMove(float value)
 {
-	if (value != 0.0f)
+	if (value != 0.0f)//입력이 들어올경우
 	{
-		UE_LOG(LogTemp, Log, TEXT("v%f"), value);
+		inputVerticalDir = true;
 		MovementDirection.X = value * VVelocity;
+	}
+	else//입력이 없을 경우
+	{
+		inputVerticalDir = false;
 	}
 }
