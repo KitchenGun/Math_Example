@@ -28,4 +28,6 @@ public:
 		FVector NewLocation;
 	UPROPERTY(EditAnywhere, Category = "Location")
 	float Velocity = 100.0f;
+
+	bool isNearBy=false;
 };
