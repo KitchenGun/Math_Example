@@ -12,17 +12,46 @@ AMovement::AMovement()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
-// Called when the game starts or when spawned
+// 시작할때 호출
 void AMovement::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//시작위치 지정
+	FVector StartLocation = FVector(0.0f, 0.0f, 200.0f);
+	SetActorLocation(StartLocation,false,0,ETeleportType::None);
+	isGround = true;
 }
 
 // Called every frame
 void AMovement::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//중력 효과
+	{
+		if (!isGround)
+		{//지면이 아닐경우
+			if (GetActorLocation().Z <= GroundPos + 0.5f && GetActorLocation().Z >= GroundPos - 0.5f)
+			{//근삿값 도달시 지면 좌표로 고정
+				if (GetActorLocation().Z != GroundPos)//지면 좌표가 아닐 경우만
+				{
+					SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GroundPos), false, 0, ETeleportType::None);
+				}
+			}
+			else
+			{//미도달시 계속 중력의 영향을 받도록함
+				SetActorLocation(GetActorLocation() - FVector(0.0f, 0.0f, gravity), false, 0, ETeleportType::None);
+			}
+		}
+		else
+		{//지면일 경우
+			if (GetActorLocation().Z > GroundPos)
+			{//지면위로 올라갈 경우
+				isGround = false;
+			}
+		}
+	}
+
+
 	FVector NewLocation; 
 	if (inputHorizontalDir&&inputVerticalDir)//동시입력
 	{
