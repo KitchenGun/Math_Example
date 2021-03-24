@@ -17,9 +17,10 @@ void AMovement::BeginPlay()
 {
 	Super::BeginPlay();
 	//시작위치 지정
-	FVector StartLocation = FVector(0.0f, 0.0f, 200.0f);
+	FVector StartLocation = FVector(0.0f, 0.0f, 2000.0f);
+	UpperPos = 0.0f;
 	SetActorLocation(StartLocation,false,0,ETeleportType::None);
-	isGround = true;
+	isGround = false;
 }
 
 // Called every frame
@@ -30,7 +31,22 @@ void AMovement::Tick(float DeltaTime)
 	{
 		if (!isGround)
 		{//지면이 아닐경우
-			if (GetActorLocation().Z <= GroundPos + 0.5f && GetActorLocation().Z >= GroundPos - 0.5f)
+			//떨어진 거리 계산
+			{
+				curHeightPos = GetActorLocation().Z;
+				if (curHeightPos > UpperPos)
+				{//올라가는 경우
+					UpperPos = curHeightPos;
+					UE_LOG(LogTemp, Log, TEXT("UpperPos %f"), UpperPos);
+				}
+				else
+				{//내려가는 경우
+					DropDistance = UpperPos - curHeightPos;
+					DropVelocity = sqrt(2 * gravity * DropDistance == 0 ? 1 : DropDistance);//낙하속도 계산식
+					UE_LOG(LogTemp, Log, TEXT("DropVelocity %f"), DropVelocity);
+				}
+			}
+			if (GetActorLocation().Z <= GroundPos)
 			{//근삿값 도달시 지면 좌표로 고정
 				if (GetActorLocation().Z != GroundPos)//지면 좌표가 아닐 경우만
 				{
@@ -39,7 +55,7 @@ void AMovement::Tick(float DeltaTime)
 			}
 			else
 			{//미도달시 계속 중력의 영향을 받도록함
-				SetActorLocation(GetActorLocation() - FVector(0.0f, 0.0f, gravity), false, 0, ETeleportType::None);
+				SetActorLocation(GetActorLocation() - FVector(0.0f, 0.0f, DropVelocity), false, 0, ETeleportType::None);
 			}
 		}
 		else
@@ -47,6 +63,7 @@ void AMovement::Tick(float DeltaTime)
 			if (GetActorLocation().Z > GroundPos)
 			{//지면위로 올라갈 경우
 				isGround = false;
+
 			}
 		}
 	}

@@ -36,11 +36,14 @@ private://이동관련 변수
 	float VVelocity = 150.0f;//수직이동속도
 	FVector MovementDirection;//방향
 //중력
-	float gravity = 0.9f;
-	float mass;
+	float gravity = 0.98f;
 	float curHeightPos;
+	float UpperPos;
+	float DropDistance;
+	float DropVelocity;
 	float GroundPos = 70.0f;
 	bool isGround = true;
+	//점프
 private:
 	void HorizontalMove(float value);
 	void VerticalMove(float value);
