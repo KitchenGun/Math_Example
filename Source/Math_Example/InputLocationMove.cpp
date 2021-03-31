@@ -35,10 +35,10 @@ void AInputLocationMove::Tick(float DeltaTime)
 				if (CurLocation.X <= NewLocation.X + 0.5f && CurLocation.X >= NewLocation.X - 0.5f)
 				{
 					UE_LOG(LogTemp, Log, TEXT("x pass"));
-					if (CurLocation.Y <= NewLocation.Y + 0.5f && CurLocation.Y >= NewLocation.Y - 0.5f)
+					if (CurLocation.Y <= NewLocation.Y + 0.5f + FLT_EPSILON && CurLocation.Y >= NewLocation.Y - 0.5f - FLT_EPSILON)
 					{
 						UE_LOG(LogTemp, Log, TEXT("y pass"));
-						if (CurLocation.Z <= NewLocation.Z + 0.5f && CurLocation.Z >= NewLocation.Z - 0.5f)
+						if (CurLocation.Z <= NewLocation.Z + 0.5f + FLT_EPSILON && CurLocation.Z >= NewLocation.Z - 0.5f - FLT_EPSILON)
 						{
 							UE_LOG(LogTemp, Log, TEXT("z pass"));
 							SetActorLocation(NewLocation, false, 0, ETeleportType::None);

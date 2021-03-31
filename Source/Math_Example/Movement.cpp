@@ -46,9 +46,9 @@ void AMovement::Tick(float DeltaTime)
 					UE_LOG(LogTemp, Log, TEXT("DropVelocity %f"), DropVelocity);
 				}
 			}
-			if (GetActorLocation().Z <= GroundPos)
+			if (GetActorLocation().Z <= GroundPos + FLT_EPSILON)
 			{//근삿값 도달시 지면 좌표로 고정
-				if (GetActorLocation().Z != GroundPos)//지면 좌표가 아닐 경우만
+				if (GetActorLocation().Z <= GroundPos + FLT_EPSILON&& GetActorLocation().Z >= GroundPos - FLT_EPSILON)//지면 좌표가 아닐 경우만
 				{
 					SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GroundPos), false, 0, ETeleportType::None);
 				}
@@ -60,7 +60,7 @@ void AMovement::Tick(float DeltaTime)
 		}
 		else
 		{//지면일 경우
-			if (GetActorLocation().Z > GroundPos)
+			if (GetActorLocation().Z > GroundPos+FLT_EPSILON)
 			{//지면위로 올라갈 경우
 				isGround = false;
 
